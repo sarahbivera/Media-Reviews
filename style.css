@@ -1,0 +1,60 @@
+body { 
+    font-family: Arial; 
+    margin:0;
+     background:#111; 
+     color:#fff; 
+    }
+header {
+     padding:10px;
+     background:#222; 
+     text-align:center;
+    }
+.page {
+     display:none; 
+     padding:20px; 
+     max-width:400px; 
+     margin:auto; 
+    }
+.active {
+     display:block;
+    }
+input, textarea, select {
+     display:block;
+     margin:10px 0; 
+     padding:8px;
+     width:100%; 
+    }
+button {
+     padding:8px 12px;
+     cursor:pointer;
+     width:100%; 
+    }
+.grid {
+     display:grid;
+     grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); 
+     gap:15px; 
+     max-width:900px; 
+     margin:auto; }
+.card { 
+     background:#222; 
+     padding:10px; 
+     border-radius:10px; 
+}
+.card img { 
+     width:100%; 
+     border-radius:8px; 
+    }
+.tabs {
+     text-align:center;
+      margin-bottom:10px;
+    }
+.tabs button { 
+     margin:5px; 
+    }
+#detailImg { 
+     width:200px; 
+    }
+.link { 
+     color:#4da6ff; 
+     cursor:pointer; 
+    }

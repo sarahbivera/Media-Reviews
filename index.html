@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReviewHub</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header><h1>ReviewHub</h1></header>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="page">
+<h2>Login</h2>
+<input id="loginUsername" placeholder="Username">
+<input id="loginPassword" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<p>New user? <span class="link" onclick="goTo('signupPage')">Sign up</span></p>
+</div>
+
+<div id="signupPage" class="page">
+<h2>Sign Up</h2>
+<input id="signupUsername" placeholder="Username">
+<input id="signupPassword" type="password" placeholder="Password">
+<button onclick="signup()">Sign Up</button>
+<p>Already have an account? <span class="link" onclick="goTo('loginPage')">Login</span></p>
+</div>
+
+<!-- LIST PAGE -->
+<div id="listPage" class="page">
+<div class="tabs">
+<button onclick="setCategory('Movies')">Movies</button>
+<button onclick="setCategory('TV')">TV Shows</button>
+<button onclick="setCategory('Books')">Books</button>
+<button onclick="logout()">Logout</button>
+</div>
+<h2 id="categoryTitle"></h2>
+<div class="grid" id="mediaGrid"></div>
+</div>
+
+<!-- DETAIL PAGE -->
+<div id="detailPage" class="page">
+<button onclick="goTo('listPage')">← Back</button>
+<h2 id="detailTitle"></h2>
+<img id="detailImg">
+<p id="detailDesc"></p>
+<h3>Reviews</h3>
+<div id="reviews"></div>
+<textarea id="comment" placeholder="Write review..."></textarea>
+<select id="rating"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+<button onclick="addReview()">Submit</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
