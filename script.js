@@ -107,7 +107,8 @@ function renderReviews(){
 }
 
 function addReview(){
-    if(!confirm('Submit review?')) return;
+    let sure = window.confirm('Submit review?');
+    if(!sure) return;
     let reviews = getReviews();
     reviews.push({
     id: currentItem.id,
