@@ -1,14 +1,26 @@
 let currentCategory = 'Movies';
 let currentItem = null;
 
+const firebaseConfig = {
+    apiKey: "AIzaSyAdc4HxzZu3NbTx4RiclXPhQUu5JyTofhQ",
+    authDomain: "media-reviews-5930a.firebaseapp.com",
+    projectId: "media-reviews-5930a",
+    storageBucket: "media-reviews-5930a.firebasestorage.app",
+    messagingSenderId: "154442583411",
+    appId: "1:154442583411:web:15a3dac0509306685d0906"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 let media = [...movies, ...tvShows, ...books];
 
 window.onload = init;
 
-function init(){
+async function init(){
     let user = localStorage.getItem('user');
     if(user) goTo('listPage'); else goTo('loginPage');
-    render();
+    await render();
 }
 
 function goTo(id){
@@ -32,7 +44,7 @@ function signup(){
     goTo('loginPage');
 }
 
-function login(){
+async function login(){
     let u = document.getElementById('loginUsername').value;
     let p = document.getElementById('loginPassword').value;
     let stored = localStorage.getItem('account_'+u);
@@ -40,7 +52,7 @@ function login(){
     if(stored && stored === p){
         localStorage.setItem('user', u);
         goTo('listPage');
-        render();
+        await render();
     } 
     else {
         alert('Invalid credentials');
@@ -57,16 +69,17 @@ function setCategory(cat){
     render();
 }
 
-function getReviews(){ 
-    return JSON.parse(localStorage.getItem('reviews'))||[]; 
+async function getReviews(){ 
+    let snapshot = await db.collection('reviews').get();
+    return snapshot.docs.map(doc => doc.data());
 }
 
-function render(){
+async function render(){
     document.getElementById('categoryTitle').innerText = currentCategory;
     let grid = document.getElementById('mediaGrid');
     if(!grid) return;
     grid.innerHTML='';
-    let reviews = getReviews();
+    let reviews = await getReviews();
 
     media.filter(m=>m.category===currentCategory).forEach(m=>{
     let r = reviews.filter(x=>x.id===m.id);
@@ -97,27 +110,32 @@ function openDetail(id){
     renderReviews();
 }
 
-function renderReviews(){
+async function renderReviews(){
     let container = document.getElementById('reviews');
     container.innerHTML='';
-    let reviews = getReviews().filter(r=>r.id===currentItem.id);
-    reviews.forEach(r=>{
-    container.innerHTML += `<p>${r.user}: ${r.comment} (${r.rating})</p>`;
+    let snapshot = await db.collection('reviews').where('id', '==', currentItem.id).get();
+    snapshot.forEach(doc => {
+        let r = doc.data();
+        container.innerHTML += `<p>${r.user}: ${r.comment} (${r.rating})</p>`;
     });
 }
 
-function addReview(){
-    let sure = window.confirm('Submit review?');
-    if(!sure) return;
-    let reviews = getReviews();
-    reviews.push({
+async function addReview(){
+    if(!confirm('Submit review?')) return;
+    let comment = document.getElementById('comment').value.trim();
+    let rating = document.getElementById('rating').value;
+    if(!comment){
+        alert('Please enter a review before submitting.');
+        return;
+    }
+    await db.collection('reviews').add({
     id: currentItem.id,
     user: localStorage.getItem('user'),
-    comment: document.getElementById('comment').value,
-    rating: document.getElementById('rating').value
+    comment,
+    rating,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-    localStorage.setItem('reviews', JSON.stringify(reviews));
     document.getElementById('comment').value='';
-    renderReviews();
-    render();
+    await renderReviews();
+    await render();
 }
