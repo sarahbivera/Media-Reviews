@@ -7,11 +7,14 @@ const firebaseConfig = {
     projectId: "media-reviews-5930a",
     storageBucket: "media-reviews-5930a.firebasestorage.app",
     messagingSenderId: "154442583411",
-    appId: "1:154442583411:web:15a3dac0509306685d0906"
+    appId: "1:154442583411:web:15a3dac0509306685d0906",
+    measurementId: "G-Z68LMVNHDD"
+    
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+firebase.analytics();
 
 let media = [...movies, ...tvShows, ...books];
 
