@@ -1,11 +1,7 @@
 let currentCategory = 'Movies';
 let currentItem = null;
 
-let media = [
-    { id:1, title:'Interstellar', category:'Movies', img:'https://via.placeholder.com/150', desc:'Very sciency.' },
-    { id:2, title:'The Pitt', category:'TV', img:'https://via.placeholder.com/150', desc:'Traumatized doctors.' },
-    { id:3, title:'All The Light We Cannot See', category:'Books', img:'https://via.placeholder.com/150', desc:'Sadness' }
-];
+let media = [...movies, ...tvShows, ...books];
 
 window.onload = init;
 
@@ -21,12 +17,19 @@ function goTo(id){
 }
 
 function signup(){
-    let u = document.getElementById('signupUsername').value;
+    let u = document.getElementById('signupUsername').value.trim();
     let p = document.getElementById('signupPassword').value;
-    if(u && p){
-        localStorage.setItem('account_'+u, p);
-        goTo('loginPage');
+    if(!u || !p){
+        alert('Please enter both username and password.');
+        return;
     }
+    let existing = localStorage.getItem('account_'+u);
+    if(existing){
+        alert('That username is already taken. Please choose another.');
+        return;
+    }
+    localStorage.setItem('account_'+u, p);
+    goTo('loginPage');
 }
 
 function login(){
@@ -84,6 +87,11 @@ function openDetail(id){
     currentItem = media.find(m=>m.id===id);
     goTo('detailPage');
     document.getElementById('detailTitle').innerText=currentItem.title;
+    let metaText = '';
+    if(currentItem.category === 'Movies') metaText = `Director: ${currentItem.director}`;
+    else if(currentItem.category === 'TV') metaText = `Streaming: ${currentItem.service}`;
+    else if(currentItem.category === 'Books') metaText = `Author: ${currentItem.author}`;
+    document.getElementById('detailMeta').innerText = metaText;
     document.getElementById('detailImg').src=currentItem.img;
     document.getElementById('detailDesc').innerText=currentItem.desc;
     renderReviews();
